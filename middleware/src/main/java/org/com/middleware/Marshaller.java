@@ -1,7 +1,7 @@
-package org.com;
+package org.com.middleware;
 
-import org.com.messager.RequestMessager;
-import org.com.messager.ResponseMessager;
+import org.com.middleware.messager.RequestMessager;
+import org.com.middleware.messager.ResponseMessager;
 
 import java.io.BufferedInputStream;
 

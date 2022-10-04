@@ -1,4 +1,4 @@
-package org.com.messager;
+package org.com.middleware.messager;
 
 public class ResponseMessager {
     String responseBody;
