@@ -1,7 +1,7 @@
 package org.com.middleware;
 
-import org.com.middleware.messager.RequestMessager;
-import org.com.middleware.messager.ResponseMessager;
+import org.com.middleware.messager.RequestMessage;
+import org.com.middleware.messager.ResponseMessage;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -9,17 +9,17 @@ import java.io.IOException;
 import java.net.Socket;
 
 public class Invoker implements Runnable {
-    private Marshaller marshaller;
-    private Socket connectionClient;
-    private RemoteObject remoteObject;
-    RequestMessager requestMessager;
-    ResponseMessager responseMessager;
+    private final Marshaller marshaller;
+    private final Socket connectionClient;
+    private final RemoteObject remoteObject;
+    RequestMessage requestMessager;
+    ResponseMessage responseMessager;
 
     public Invoker(Socket connectionClient) {
         this.connectionClient = connectionClient;
         this.marshaller = new Marshaller();
         //this.requestMessager = new RequestMessager();
-        this.responseMessager = new ResponseMessager();
+        this.responseMessager = new ResponseMessage();
         this.remoteObject = RemoteObject.getInstance();
     }
 
@@ -37,21 +37,21 @@ public class Invoker implements Runnable {
 
     }
 
-    public void receiveRequestCliente(){
+    public void receiveRequestCliente() {
         //desserializar menssagem
         //invoca os metodos da classe remota passando a requisição
         //espera a resposta da invocação
         try {
             BufferedInputStream in = new BufferedInputStream(connectionClient.getInputStream());
             // requestMessager = invoke
-             requestMessager = new RequestMessager("POST", "/name", "teste");
-             responseMessager = remoteObject.invokeMethods(requestMessager);
+            requestMessager = new RequestMessage("POST", "/name", "teste");
+            responseMessager = remoteObject.invokeMethods(requestMessager);
         } catch (IOException e) {
             System.err.println("erro ao tentar receber mensagem: " + e.getStackTrace());
         }
     }
 
-    public void sendResponseCliente(){
+    public void sendResponseCliente() {
         try {
             BufferedOutputStream out = new BufferedOutputStream(connectionClient.getOutputStream());
             String responseSerializer = marshaller.marshall(responseMessager);
