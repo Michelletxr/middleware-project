@@ -21,7 +21,6 @@ public class Marshaller {
         responseBuffer.append(contentLengthHeader);
         responseBuffer.append(ln);
         responseBuffer.append(response.getResponseBody());
-
         return responseBuffer.toString();
     }
 
@@ -36,7 +35,6 @@ public class Marshaller {
                 .body(new JSONObject("{" + body + "}"))
                 .build();
     }
-
     public String getStatusCodText(int statusCod) {
         if (statusCod == 200) {
             return "HTTP/1.0 200 OK" + ln;

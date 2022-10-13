@@ -1,8 +1,6 @@
 package org.com.middleware;
-
 import org.com.middleware.messager.RequestMessage;
 import org.com.middleware.messager.ResponseMessage;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
@@ -18,7 +16,7 @@ public class Invoker implements Runnable {
     public Invoker(Socket connectionClient) {
         this.connectionClient = connectionClient;
         this.marshaller = new Marshaller();
-        //this.requestMessager = new RequestMessager();
+        //this.requestMessager = new RequestMessage();
         this.responseMessager = new ResponseMessage();
         this.remoteObject = RemoteObject.getInstance();
     }
@@ -26,25 +24,17 @@ public class Invoker implements Runnable {
     @Override
     public void run() {
         System.out.println("Connect Invoker");
-        //receive mensseger to client
         receiveRequestCliente();
-        //enviar request para o objeto remoto
-        //receber response do objeto remoto
-
-
-        //enviar o response para o cliente
-        //sendResponseCliente();
-
     }
 
-    public void receiveRequestCliente() {
-        //desserializar menssagem
-        //invoca os metodos da classe remota passando a requisição
-        //espera a resposta da invocação
+    //desserializar menssagem
+    //invoca os metodos da classe remota passando a requisição
+    //espera a resposta da invocação
+    public void receiveRequestCliente(){
+
         try {
             BufferedInputStream in = new BufferedInputStream(connectionClient.getInputStream());
-            // requestMessager = invoke
-            requestMessager = new RequestMessage("POST", "/name", "teste");
+            this.requestMessager = this.marshaller.unMarchall(in);
             responseMessager = remoteObject.invokeMethods(requestMessager);
         } catch (IOException e) {
             System.err.println("erro ao tentar receber mensagem: " + e.getStackTrace());
@@ -59,6 +49,5 @@ public class Invoker implements Runnable {
         } catch (IOException e) {
             System.err.println("erro ao tenatar enviar mensagem: " + e.getStackTrace());
         }
-
     }
 }

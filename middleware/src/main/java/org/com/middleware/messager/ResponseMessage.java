@@ -1,8 +1,10 @@
 package org.com.middleware.messager;
 
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
-@Getter
+
+@Data
 public class ResponseMessage {
     String responseBody;
     int statusCod;
