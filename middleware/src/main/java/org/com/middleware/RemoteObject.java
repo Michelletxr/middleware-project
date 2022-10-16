@@ -14,7 +14,9 @@ public class RemoteObject {
     public static HashMap<String, Method> putMethods;
     public static HashMap<String, Method> deleteMethods;
     private static RemoteObject remoteObject;
-    Method runMethod;
+
+    private String runPath;
+    private Method runMethod;
 
 
 
@@ -30,21 +32,24 @@ public class RemoteObject {
     }
 
     public ResponseMessage invokeMethods(RequestMessage requestMesseger) {
+        ResponseMessage responseMessage = new ResponseMessage();
 
         selectMethod(requestMesseger.getMethod(), requestMesseger.getRouter());
         try {
-            JSONObject my_obj = new JSONObject();
-            my_obj.put("name", "teste");
-            callMethod(my_obj);
+            Object obj = callMethod(requestMesseger.getBody());
+            responseMessage.setResponseBody(obj.toString());
+            responseMessage.setStatusCod(200);
+            System.out.println("obj "  + obj.toString());
         }catch (Exception e){
-            System.err.println("erro"  + e);
+            responseMessage.setStatusCod(500);
+            responseMessage.setResponseBody("erro: " + e);
+            System.err.println("erro ao tentar invocar metodo: "  + e);
         }
 
-        return null;
+        return responseMessage;
     }
 
     private void selectMethod(String method, String router) {
-
         if (method.equals("GET")) {
             runMethod = getMethods.get(router);
         } else if (method.equals("POST")){
@@ -54,9 +59,11 @@ public class RemoteObject {
         }else if(method.equals("PUT")){
             runMethod = putMethods.get(router);
         }
+        runPath = router;
     }
 
-    private void callMethod(JSONObject requestMesseger) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    private Object callMethod(JSONObject requestMesseger) throws NoSuchMethodException,
+            InvocationTargetException, InstantiationException, IllegalAccessException {
 
         Class<?> clazz = runMethod.getDeclaringClass();
         Object instance = clazz.getDeclaredConstructor().newInstance();
@@ -67,16 +74,21 @@ public class RemoteObject {
         if (annotations.length == 0) {
             System.out.println("o método não possui parametros");
             responseObj = runMethod.invoke(instance, null);
+            System.out.println("response: " + responseObj);
         } else {
+
             //com parametros
             for (Annotation[] annotationArray : annotations) {
                 for (Annotation annotation : annotationArray) {
                     String annotationName = annotation.toString();
-                    if (annotationName.contains("PathVariable")) {
+                    if (annotationName.contains("PathVariable"))
+                    {
                         System.out.println("PathVariable" + annotationName);
+
                     }
                     if (annotationName.contains("RequestBody")) {
                         responseObj = runMethod.invoke(instance, requestMesseger);
+                        System.out.println("response: " + responseObj);
                        /* for ( Class<?> param :runMethod.getParameterTypes())
                         {
                             //Object objectParam = param.getDeclaredConstructor();
@@ -88,6 +100,7 @@ public class RemoteObject {
                 }
             }
         }
+        return responseObj;
 
     }
 

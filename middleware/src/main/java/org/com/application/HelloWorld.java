@@ -7,7 +7,7 @@ import org.json.JSONObject;
 @NoArgsConstructor
 @ResquestMapping(value = "/")
 public class HelloWorld {
-    @GetMapping()
+    @GetMapping("/")
     public String helo() {
         System.out.println("chamando metodo");
         return "hello";
@@ -18,5 +18,6 @@ public class HelloWorld {
         System.out.println("chamando metodo" + hello);
         return "helo " ;
     }
+
    public record ObjHello(String name){}
 }

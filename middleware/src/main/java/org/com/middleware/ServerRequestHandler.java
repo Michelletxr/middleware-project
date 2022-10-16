@@ -19,12 +19,20 @@ public class ServerRequestHandler {
         this.serverSocket = new ServerSocket(this.port);
         System.out.println("start service in port:" + serverSocket.getLocalPort());
         while (true){
-            Socket connetion = serverSocket.accept();
-            dispatchToInvoker(connetion);
+
+            Socket connection = serverSocket.accept();
+
+           // BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
+            //System.out.println("req" + in.readLine());
+            Invoker invoker = new Invoker(connection);
+            invoker.run();
+          //  dispatchToInvoker(connetion);
         }
     }
     public void dispatchToInvoker(Socket connectionClient){
-            new Invoker(connectionClient).run();
+            Invoker invoker = new Invoker(connectionClient);
+            invoker.run();
     }
 
 }
