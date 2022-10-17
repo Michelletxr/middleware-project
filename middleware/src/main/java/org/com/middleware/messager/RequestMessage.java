@@ -1,29 +1,21 @@
 package org.com.middleware.messager;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.json.JSONObject;
 
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class RequestMessage {
-    String method;
-    String router;
-    String valorBody;
-    JSONObject body;
+    private String method;
+    private String router;
+    private String valorBody;
+    private JSONObject body;
 
-    public RequestMessage(String method, String router, String valorBody, JSONObject body) {
-        this.method = method;
-        this.router = router;
-        this.valorBody = valorBody;
-        this.body = body;
-    }
-
-    public RequestMessage(String method, String router, String valorBody) {
-        this.method = method;
-        this.router = router;
-        this.valorBody = valorBody;
-    }
 }
 

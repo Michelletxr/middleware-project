@@ -1,13 +1,9 @@
 package org.com.middleware;
 
-import org.com.middleware.annotations.GetMapping;
-import org.com.middleware.annotations.PostMapping;
-import org.com.middleware.annotations.RequestBody;
+import org.com.middleware.annotations.*;
 
 import java.io.IOException;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
 import java.util.Arrays;
 
 public class MyMiddleware {
@@ -42,6 +38,15 @@ public class MyMiddleware {
                 Arrays.stream(method.getParameters()).forEach(param -> System.out.println(param.getName()));
             }
 
+            if(method.isAnnotationPresent(PutMapping.class)){
+                method.setAccessible(true);
+                RemoteObject.putMethods.put(method.getAnnotation(PutMapping.class).value(), method);
+            }
+
+            if(method.isAnnotationPresent(DeleteMapping.class)){
+                method.setAccessible(true);
+                RemoteObject.putMethods.put(method.getAnnotation(DeleteMapping.class).value(), method);
+            }
         }
     }
 

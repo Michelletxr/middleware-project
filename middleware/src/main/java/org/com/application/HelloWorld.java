@@ -1,22 +1,23 @@
 package org.com.application;
 
-import org.com.middleware.annotations.GetMapping;
-import org.com.middleware.annotations.PostMapping;
-import org.com.middleware.annotations.RequestBody;
-import org.com.middleware.annotations.ResquestMapping;
+import org.com.middleware.annotations.*;
 import lombok.NoArgsConstructor;
+import org.json.JSONObject;
 
 @NoArgsConstructor
 @ResquestMapping(value = "/")
 public class HelloWorld {
-    @GetMapping()
+    @GetMapping("/")
     public String helo() {
+        System.out.println("chamando metodo");
         return "hello";
     }
 
     @PostMapping(value = "/name")
     public String HelloName(@RequestBody ObjHello hello ) {
-        return "helo " + hello.name;
+        System.out.println("chamando metodo" + hello);
+        return "helo " ;
     }
-    record ObjHello(String name){}
+
+   public record ObjHello(String name){}
 }

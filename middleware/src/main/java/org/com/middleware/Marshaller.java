@@ -5,6 +5,8 @@ import org.com.middleware.messager.ResponseMessage;
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.StringTokenizer;
 
 public class Marshaller {
@@ -21,22 +23,41 @@ public class Marshaller {
         responseBuffer.append(contentLengthHeader);
         responseBuffer.append(ln);
         responseBuffer.append(response.getResponseBody());
-
         return responseBuffer.toString();
     }
 
-    public RequestMessage unMarchall(BufferedInputStream in) {
-        String request = in.toString();
-        StringTokenizer tokenizer = new StringTokenizer(request);
-        String body = request.substring(request.lastIndexOf("{") + 1, request.length() - 1);
-        return RequestMessage.builder()
-                .method(tokenizer.nextToken().toUpperCase())
-                .router(tokenizer.nextToken())
-                .valorBody(body)
-                .body(new JSONObject("{" + body + "}"))
-                .build();
-    }
+    public RequestMessage unMarchall(BufferedReader in) throws IOException {
+        String request = in.readLine();
+        System.out.println("request " +  request);
+        if(request!=null) {
+            StringTokenizer tokenizer = new StringTokenizer(request);
+            String method = tokenizer.nextToken();
+            String router = tokenizer.nextToken();
+            String body = "";
 
+            while(true){
+                System.out.println("line1:  " +  request);
+
+                if((request = in.readLine()).isBlank()){
+                    while(!(request = in.readLine()).isBlank()){
+                        System.out.println("line2 :  " +  request);
+                        body = body.concat(request);
+                    }
+                    break;
+                }
+            }
+            System.out.println("resultado final body: " + body);
+           // String body = request.substring(request.lastIndexOf("{") + 1, request.length() - 1);
+            return RequestMessage.builder()
+                    .method(method)
+                    .router(router)
+                    .valorBody(body)
+                    .body(new JSONObject(body))
+                    .build();
+        }
+
+        return null;
+    }
     public String getStatusCodText(int statusCod) {
         if (statusCod == 200) {
             return "HTTP/1.0 200 OK" + ln;
