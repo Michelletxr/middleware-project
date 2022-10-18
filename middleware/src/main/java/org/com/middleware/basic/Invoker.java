@@ -1,8 +1,12 @@
-package org.com.middleware;
-import org.com.middleware.messager.RequestMessage;
-import org.com.middleware.messager.ResponseMessage;
+package org.com.middleware.basic;
 
-import java.io.*;
+import org.com.middleware.basic.messager.RequestMessage;
+import org.com.middleware.basic.messager.ResponseMessage;
+
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.Objects;
 

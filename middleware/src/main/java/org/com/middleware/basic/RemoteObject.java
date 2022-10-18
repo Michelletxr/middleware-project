@@ -1,7 +1,9 @@
-package org.com.middleware;
-import org.com.middleware.messager.RequestMessage;
-import org.com.middleware.messager.ResponseMessage;
+package org.com.middleware.basic;
+
+import org.com.middleware.basic.messager.RequestMessage;
+import org.com.middleware.basic.messager.ResponseMessage;
 import org.json.JSONObject;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
