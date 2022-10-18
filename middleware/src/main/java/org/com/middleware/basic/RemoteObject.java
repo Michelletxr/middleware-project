@@ -1,13 +1,12 @@
 package org.com.middleware.basic;
 
-import org.com.middleware.basic.messager.RequestMessage;
-import org.com.middleware.basic.messager.ResponseMessage;
-import org.json.JSONObject;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import org.com.middleware.basic.messager.RequestMessage;
+import org.com.middleware.basic.messager.ResponseMessage;
+import org.json.JSONObject;
 
 public class RemoteObject {
 
@@ -15,22 +14,18 @@ public class RemoteObject {
     public static HashMap<String, Method> postMethods;
     public static HashMap<String, Method> putMethods;
     public static HashMap<String, Method> deleteMethods;
-    private static RemoteObject remoteObject;
-
     private String runPath;
     private Method runMethod;
 
+    public RemoteObject() {
+        getMethods = new HashMap<>();
+        postMethods = new HashMap<>();
+        putMethods = new HashMap<>();
+        deleteMethods = new HashMap<>();
+    }
 
-
-    static public RemoteObject getInstance() {
-        if (remoteObject == null) {
-            remoteObject = new RemoteObject();
-            getMethods = new HashMap<>();
-            postMethods = new HashMap<>();
-            putMethods = new HashMap<>();
-            deleteMethods = new HashMap<>();
-        }
-        return remoteObject;
+    public static RemoteObject getInstance() {
+        return new RemoteObject();
     }
 
     public ResponseMessage invokeMethods(RequestMessage requestMesseger) {
@@ -41,7 +36,7 @@ public class RemoteObject {
             Object obj = callMethod(requestMesseger.getBody());
             responseMessage.setResponseBody(obj.toString());
             responseMessage.setStatusCod(200);
-            System.out.println("obj "  + obj.toString());
+            System.out.println("obj " + obj.toString());
         }catch (Exception e){
             responseMessage.setStatusCod(500);
             responseMessage.setResponseBody("erro: " + e);

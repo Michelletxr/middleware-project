@@ -10,7 +10,7 @@ public class HelloWorld {
     @GetMapping("/")
     public String helo() {
         System.out.println("chamando metodo");
-        return "hello";
+        return "hellsos";
     }
 
     @PostMapping(value = "/name")
