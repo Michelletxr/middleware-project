@@ -1,13 +1,14 @@
-package org.com.middleware;
+package org.com.middleware.Identification;
 
 import org.com.application.HelloWorld;
+
 
 public class InterfaceBroker {
 
     public static void main(String[] args) {
         HelloWorld helloWorld = new HelloWorld();
         MyMiddleware myMiddlewareServer = new MyMiddleware();
-        myMiddlewareServer.addClassMethods(helloWorld);
+        myMiddlewareServer.createRMI(helloWorld);
         myMiddlewareServer.start(8080);
     }
 }

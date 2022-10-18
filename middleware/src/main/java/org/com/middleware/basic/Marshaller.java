@@ -1,10 +1,9 @@
-package org.com.middleware;
+package org.com.middleware.basic;
 
-import org.com.middleware.messager.RequestMessage;
-import org.com.middleware.messager.ResponseMessage;
+import org.com.middleware.basic.messager.RequestMessage;
+import org.com.middleware.basic.messager.ResponseMessage;
 import org.json.JSONObject;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.StringTokenizer;
@@ -37,7 +36,6 @@ public class Marshaller {
 
             while(true){
                 System.out.println("line1:  " +  request);
-
                 if((request = in.readLine()).isBlank()){
                     while(!(request = in.readLine()).isBlank()){
                         System.out.println("line2 :  " +  request);

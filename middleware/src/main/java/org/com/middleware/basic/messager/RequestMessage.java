@@ -1,4 +1,4 @@
-package org.com.middleware.messager;
+package org.com.middleware.basic.messager;
 
 
 import lombok.AllArgsConstructor;
