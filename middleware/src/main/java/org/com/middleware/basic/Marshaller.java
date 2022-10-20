@@ -1,12 +1,11 @@
 package org.com.middleware.basic;
 
-import org.com.middleware.basic.messager.RequestMessage;
-import org.com.middleware.basic.messager.ResponseMessage;
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.StringTokenizer;
+import org.com.middleware.basic.messager.RequestMessage;
+import org.com.middleware.basic.messager.ResponseMessage;
+import org.json.JSONObject;
 
 public class Marshaller {
     private final String ln = (System.getProperty("line.separator"));
@@ -45,7 +44,6 @@ public class Marshaller {
                 }
             }
             System.out.println("resultado final body: " + body);
-           // String body = request.substring(request.lastIndexOf("{") + 1, request.length() - 1);
             return RequestMessage.builder()
                     .method(method)
                     .router(router)

@@ -1,4 +1,4 @@
-package org.com.middleware.basic;
+package org.com.middleware.identification;
 
 import static org.com.middleware.basic.RemoteObject.deleteMethods;
 import static org.com.middleware.basic.RemoteObject.getMethods;
@@ -14,28 +14,36 @@ import org.com.middleware.annotations.DeleteMapping;
 import org.com.middleware.annotations.GetMapping;
 import org.com.middleware.annotations.PostMapping;
 import org.com.middleware.annotations.PutMapping;
+import org.com.middleware.basic.RemoteObject;
+import org.com.middleware.basic.ServerRequestHandler;
 
 public class MyMiddleware {
 
-  RemoteObject remoteObject;
+  private RemoteObject rmi;
+  private Object stub;
+  private Registry registry;
 
   public MyMiddleware() {
-    remoteObject = RemoteObject.getInstance();
+    this.registry = Registry.getInstance();
   }
 
-  //cadastrar os metodos da classe de negocio;
-  public void addClassMethods(Object object) {
+  public void createRMI(Object object) {
+    stub = object;
+    this.rmi = new RemoteObject();
+    this.addClassMethods();
+    registry.bind(stub.getClass().getName(), rmi);
+  }
 
-    Class<?> objectClass = object.getClass();
+  public void addClassMethods() {
+
+    Class<?> objectClass = stub.getClass();
     Method[] declaredMethods = objectClass.getDeclaredMethods();
 
     for (Method method : declaredMethods) {
       System.out.println("add class method :" + method.toString());
       this.anotationMethodCheck(method);
     }
-
   }
-
 
   private void anotationMethodCheck(Method method) {
     checkMethodType(method, GetMapping.class, getMethods, method.getAnnotation(GetMapping.class).value());
@@ -55,7 +63,6 @@ public class MyMiddleware {
       }
     }
   }
-
 
   public void start(int port) {
     try {
