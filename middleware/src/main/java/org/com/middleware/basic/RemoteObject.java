@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class RemoteObject {
@@ -15,6 +16,8 @@ public class RemoteObject {
     public static HashMap<String, Method> postMethods;
     public static HashMap<String, Method> putMethods;
     public static HashMap<String, Method> deleteMethods;
+
+    public static ArrayList<String> autorizedRoutes;
     private static RemoteObject remoteObject;
 
     private String runPath;
@@ -31,6 +34,14 @@ public class RemoteObject {
             deleteMethods = new HashMap<>();
         }
         return remoteObject;
+    }
+
+    public RemoteObject()
+    {
+        getMethods = new HashMap<>();
+        postMethods = new HashMap<>();
+        putMethods = new HashMap<>();
+        deleteMethods = new HashMap<>();
     }
 
     public ResponseMessage invokeMethods(RequestMessage requestMesseger) {

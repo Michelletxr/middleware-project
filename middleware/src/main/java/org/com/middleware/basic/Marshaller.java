@@ -11,6 +11,11 @@ import java.util.StringTokenizer;
 public class Marshaller {
     private final String ln = (System.getProperty("line.separator"));
 
+    public String getRequestKey(){
+        return null;
+    }
+
+    public String getAutorization(RequestMessage requestMessage){ return null;}
     public String marshall(ResponseMessage response) {
         StringBuilder responseBuffer = new StringBuilder();
         String serverHeader = "Server: localhost" + ln;

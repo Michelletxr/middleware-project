@@ -1,7 +1,8 @@
 package org.com.middleware.Identification;
 
-import org.com.middleware.RemoteObject;
+import org.com.middleware.basic.RemoteObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Registry {

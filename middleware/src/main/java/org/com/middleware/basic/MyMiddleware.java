@@ -1,9 +1,9 @@
 package org.com.middleware.basic;
 
-import org.com.middleware.basic.annotations.DeleteMapping;
-import org.com.middleware.basic.annotations.GetMapping;
-import org.com.middleware.basic.annotations.PostMapping;
-import org.com.middleware.basic.annotations.PutMapping;
+import org.com.middleware.annotations.DeleteMapping;
+import org.com.middleware.annotations.GetMapping;
+import org.com.middleware.annotations.PostMapping;
+import org.com.middleware.annotations.PutMapping;
 
 import java.io.IOException;
 import java.lang.reflect.Method;

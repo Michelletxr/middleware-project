@@ -1,11 +1,8 @@
 package org.com.middleware.Identification;
 
-import org.com.middleware.RemoteObject;
-import org.com.middleware.ServerRequestHandler;
-import org.com.middleware.annotations.DeleteMapping;
-import org.com.middleware.annotations.GetMapping;
-import org.com.middleware.annotations.PostMapping;
-import org.com.middleware.annotations.PutMapping;
+import org.com.middleware.annotations.*;
+import org.com.middleware.basic.RemoteObject;
+import org.com.middleware.basic.ServerRequestHandler;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -16,7 +13,10 @@ public class MyMiddleware {
     private Object stub;
     private Registry registry;
 
+    private String objectId;
+
     public MyMiddleware() {
+        this.rmi = new RemoteObject();
         this.registry = Registry.getInstance();
     }
 
@@ -24,39 +24,37 @@ public class MyMiddleware {
         stub = object;
         this.rmi = new RemoteObject();
         this.addClassMethods();
-        registry.bind(stub.getClass().getName(), rmi);
+        registry.bind(objectId, rmi);
     }
 
     public void addClassMethods(){
 
-        //pegar classe do objeto
         Class<?> clazs = stub.getClass();
-
-        //pegar metodos declarados (interfaces)
+        objectId =  stub.getClass().getAnnotation(ResquestMapping.class).value();
         Method methods[] = clazs.getDeclaredMethods();
+
         for (Method method: methods) {
+
             System.out.println("add class method :" + method.toString());
-            //conferir o método da anotação
+
+            method.setAccessible(true);
+
             if(method.isAnnotationPresent(GetMapping.class)){
-                method.setAccessible(true);
                 rmi.getMethods.put(method.getAnnotation(GetMapping.class).value(), method);
                 System.out.println(" method GET router: " + method.getAnnotation(GetMapping.class).value());
             }
 
             if(method.isAnnotationPresent(PostMapping.class)){
-                method.setAccessible(true);
                 rmi.postMethods.put(method.getAnnotation(PostMapping.class).value(), method);
                 System.out.println(" method POST router: " + method.getAnnotation(PostMapping.class).value());
                 Arrays.stream(method.getParameters()).forEach(param -> System.out.println(param.getName()));
             }
 
             if(method.isAnnotationPresent(PutMapping.class)){
-                method.setAccessible(true);
                 rmi.putMethods.put(method.getAnnotation(PutMapping.class).value(), method);
             }
 
             if(method.isAnnotationPresent(DeleteMapping.class)){
-                method.setAccessible(true);
                 rmi.putMethods.put(method.getAnnotation(DeleteMapping.class).value(), method);
             }
         }

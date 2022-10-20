@@ -7,7 +7,9 @@ import org.json.JSONObject;
 @NoArgsConstructor
 @ResquestMapping(value = "/")
 public class HelloWorld {
+
     @GetMapping("/")
+    @Autorized
     public String helo() {
         System.out.println("chamando metodo");
         return "hello";
