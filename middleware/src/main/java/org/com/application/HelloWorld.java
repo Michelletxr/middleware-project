@@ -5,19 +5,21 @@ import lombok.NoArgsConstructor;
 import org.json.JSONObject;
 
 @NoArgsConstructor
-@ResquestMapping(value = "/")
+@RequestMapping(value = "/hello")
 public class HelloWorld {
-    @GetMapping("/")
-    public String helo() {
-        System.out.println("chamando metodo");
-        return "hellsos";
-    }
 
-    @PostMapping(value = "/name")
-    public String HelloName(@RequestBody ObjHello hello ) {
-        System.out.println("chamando metodo" + hello);
-        return "helo " ;
-    }
+  @Authorization
+  @GetMapping("")
+  public String helo() {
+    return "hello get";
+  }
 
-   public record ObjHello(String name){}
+  @PostMapping(value = "/teste")
+  public String helloName(@RequestBody JSONObject hello) {
+    return "helo post";
+  }
+
+  public record ObjHello(String name) {
+
+  }
 }
