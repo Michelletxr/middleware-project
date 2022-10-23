@@ -1,4 +1,4 @@
-package org.com.middleware.basic.messager;
+package org.com.middleware.messager;
 
 import lombok.Data;
 

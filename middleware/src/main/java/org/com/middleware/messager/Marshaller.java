@@ -1,7 +1,7 @@
-package org.com.middleware.basic;
+package org.com.middleware.messager;
 
-import org.com.middleware.basic.messager.RequestMessage;
-import org.com.middleware.basic.messager.ResponseMessage;
+import org.com.middleware.messager.RequestMessage;
+import org.com.middleware.messager.ResponseMessage;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -15,7 +15,19 @@ public class Marshaller {
         return null;
     }
 
-    public String getAutorization(RequestMessage requestMessage){ return null;}
+    public String getAuthorization(String str)
+    {
+        StringTokenizer tokenizer = new StringTokenizer(str);
+        String token = null;
+        while (tokenizer.hasMoreElements()){
+            String value = tokenizer.nextToken();
+            if("Bearer".equals(value) || "Basic".equals(value)){
+                token = tokenizer.nextToken();
+            }
+        }
+        System.out.println("TOKEN " + token);
+        return token;
+    }
     public String marshall(ResponseMessage response) {
         StringBuilder responseBuffer = new StringBuilder();
         String serverHeader = "Server: localhost" + ln;
@@ -32,16 +44,23 @@ public class Marshaller {
 
     public RequestMessage unMarchall(BufferedReader in) throws IOException {
         String request = in.readLine();
-        System.out.println("request " +  request);
         if(request!=null) {
             StringTokenizer tokenizer = new StringTokenizer(request);
             String method = tokenizer.nextToken();
             String router = tokenizer.nextToken();
             String body = "";
+            String authorization = "";
 
             while(true){
-                System.out.println("line1:  " +  request);
-                if((request = in.readLine()).isBlank()){
+                request = in.readLine();
+
+                if(request.contains("Authorization")){
+                    String[] token = request.split("Authorization: ");
+                    authorization = this.getAuthorization(request);
+                }
+
+                if(request.isBlank()){
+                    //if(request.isEmpty()){break;}
                     while(!(request = in.readLine()).isBlank()){
                         System.out.println("line2 :  " +  request);
                         body = body.concat(request);
@@ -49,13 +68,12 @@ public class Marshaller {
                     break;
                 }
             }
-            System.out.println("resultado final body: " + body);
-           // String body = request.substring(request.lastIndexOf("{") + 1, request.length() - 1);
             return RequestMessage.builder()
                     .method(method)
                     .router(router)
                     .valorBody(body)
                     .body(new JSONObject(body))
+                    .authorization(authorization)
                     .build();
         }
 

@@ -1,13 +1,12 @@
 package org.com.middleware.basic;
 
-import org.com.middleware.basic.messager.RequestMessage;
-import org.com.middleware.basic.messager.ResponseMessage;
+import org.com.middleware.messager.RequestMessage;
+import org.com.middleware.messager.ResponseMessage;
 import org.json.JSONObject;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class RemoteObject {
@@ -16,10 +15,7 @@ public class RemoteObject {
     public static HashMap<String, Method> postMethods;
     public static HashMap<String, Method> putMethods;
     public static HashMap<String, Method> deleteMethods;
-
-    public static ArrayList<String> autorizedRoutes;
     private static RemoteObject remoteObject;
-
     private String runPath;
     private Method runMethod;
 
@@ -52,10 +48,9 @@ public class RemoteObject {
             Object obj = callMethod(requestMesseger.getBody());
             responseMessage.setResponseBody(obj.toString());
             responseMessage.setStatusCod(200);
-            System.out.println("obj "  + obj.toString());
         }catch (Exception e){
             responseMessage.setStatusCod(500);
-            responseMessage.setResponseBody("erro: " + e);
+            responseMessage.setResponseBody("erro na chamada do método: " + e.getStackTrace());
             System.err.println("erro ao tentar invocar metodo: "  + e);
         }
 
@@ -85,30 +80,19 @@ public class RemoteObject {
 
         //sem parametros
         if (annotations.length == 0) {
-            System.out.println("o método não possui parametros");
             responseObj = runMethod.invoke(instance, null);
-            System.out.println("response: " + responseObj);
         } else {
 
             //com parametros
             for (Annotation[] annotationArray : annotations) {
                 for (Annotation annotation : annotationArray) {
                     String annotationName = annotation.toString();
-                    if (annotationName.contains("PathVariable"))
-                    {
-                        System.out.println("PathVariable" + annotationName);
-
+                    if (annotationName.contains("PathVariable")) {
+                      //  System.out.println("PathVariable" + annotationName);
                     }
                     if (annotationName.contains("RequestBody")) {
                         responseObj = runMethod.invoke(instance, requestMesseger);
-                        System.out.println("response: " + responseObj);
-                       /* for ( Class<?> param :runMethod.getParameterTypes())
-                        {
-                            //Object objectParam = param.getDeclaredConstructor();
-                            //System.out.println(objectParam);
-                            //runMethod.invoke(instance, objectParam); //desserialize object
-                        }
-                        */
+                       // System.out.println("response: " + responseObj);
                     }
                 }
             }

@@ -1,4 +1,4 @@
-package org.com.middleware.basic.messager;
+package org.com.middleware.messager;
 
 
 import lombok.AllArgsConstructor;
@@ -16,6 +16,6 @@ public class RequestMessage {
     private String router;
     private String valorBody;
     private JSONObject body;
-
+    private String authorization;
 }
 
