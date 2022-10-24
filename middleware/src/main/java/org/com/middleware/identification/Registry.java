@@ -14,7 +14,7 @@ public class Registry {
       registry = new Registry();
       remoteObjectHashMap = new HashMap<>();
     }
-    return registry;
+    return new Registry();
   }
 
   public void bind(String id, RemoteObject object) {

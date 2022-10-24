@@ -40,8 +40,8 @@ public class Marshaller {
     return responseBuffer.toString();
   }
 
-  public static RequestMessage unMarchall(BufferedReader in) throws IOException {
-    String request = in.readLine();
+
+  public static RequestMessage unMarchall(String request) throws IOException {
     if (request != null) {
       StringTokenizer tokenizer = new StringTokenizer(request);
       String method = tokenizer.nextToken();
@@ -50,14 +50,14 @@ public class Marshaller {
       String authorization = "";
 
       while (true) {
-        request = in.readLine();
+        request = tokenizer.nextToken();
 
         if (request.contains("Authorization")) {
           authorization = getAuthorization(request);
         }
 
         if (request.isBlank()) {
-          while (!(request = in.readLine()).isBlank()) {
+          while (!(request = tokenizer.nextToken()).isBlank()) {
             System.out.println("line2 :  " + request);
             body = body.concat(request);
           }
@@ -69,6 +69,39 @@ public class Marshaller {
           .router(router)
           .valorBody(body)
           .body(new JSONObject(body))
+          .authorization(authorization)
+          .build();
+    }
+
+    return null;
+  }
+
+  public static RequestMessage unMarchall(BufferedReader in) throws IOException {
+    String request = in.readLine();
+    if (request != null) {
+      StringTokenizer tokenizer = new StringTokenizer(request);
+      String method = tokenizer.nextToken();
+      String router = tokenizer.nextToken();
+      String body = "";
+      String authorization = "";
+
+      request = in.readLine();
+      if (request != null && request.contains("Authorization")) {
+        authorization = getAuthorization(request);
+      }
+
+      if (request != null && request.isBlank()) {
+        while (!(request = in.readLine()).isBlank()) {
+          System.out.println("line2 :  " + request);
+          body = body.concat(request);
+        }
+      }
+
+      return RequestMessage.builder()
+          .method(method)
+          .router(router)
+          .valorBody(body)
+          .body(!"".equals(body) ? new JSONObject(body) : null)
           .authorization(authorization)
           .build();
     }
