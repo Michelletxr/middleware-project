@@ -1,4 +1,4 @@
-package org.com.middleware.Identification;
+package org.com.middleware.identification;
 
 import org.com.application.Hello2;
 import org.com.application.HelloWorld;

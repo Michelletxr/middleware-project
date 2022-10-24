@@ -1,32 +1,33 @@
 package org.com.middleware.Identification;
-
-import org.com.middleware.abstract_class.AbstractInvoker;
-import org.com.middleware.basic.RemoteObject;
-
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Objects;
 
-public class Invoker extends AbstractInvoker {
+public class Invoker {
 
-    protected Registry registry;
+   // private final Marshaller marshaller;
+    private Socket connectionClient;
+    private Registry registry;
+    //RequestMessage requestMessager;
+   // ResponseMessage responseMessager;
 
     public Invoker(Socket connectionClient) {
-        super(connectionClient);
-        registry = Registry.getInstance();
+        this.connectionClient = connectionClient;
+       // this.marshaller = new Marshaller();
+      //  this.requestMessager = new RequestMessage();
+       // this.responseMessager = new ResponseMessage();
+        this.registry = Registry.getInstance();
     }
 
-    @Override
-    public void implementInvoker() {
+    public void run() {
         System.out.println("Connect Invoker");
-        requestMessager = receiveRequestCliente();
+        /* requestMessager = receiveRequestCliente();
         if(!Objects.isNull(requestMessager)){
-            //RESOLVER KEY
-            RemoteObject rmi = this.registry.lookup("/hello");
-            responseMessager = rmi.invokeMethods(requestMessager);
-            System.out.println(responseMessager);
+           RemoteObject rmi = this.registry.lookup("key");
+           responseMessager = rmi.invokeMethods(requestMessager);
+           System.out.println(responseMessager);
             sendResponseCliente();
-        }
+        }*/
 
         try {
             connectionClient.close();

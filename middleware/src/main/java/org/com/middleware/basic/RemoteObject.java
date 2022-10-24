@@ -8,6 +8,9 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import org.com.middleware.messager.RequestMessage;
+import org.com.middleware.messager.ResponseMessage;
+import org.json.JSONObject;
 
 public class RemoteObject {
 
@@ -19,18 +22,23 @@ public class RemoteObject {
     private String runPath;
     private Method runMethod;
 
+  public RemoteObject() {
+    getMethods = new HashMap<>();
+    postMethods = new HashMap<>();
+    putMethods = new HashMap<>();
+    deleteMethods = new HashMap<>();
+  }
 
-
-    static public RemoteObject getInstance() {
-        if (remoteObject == null) {
-            remoteObject = new RemoteObject();
-            getMethods = new HashMap<>();
-            postMethods = new HashMap<>();
-            putMethods = new HashMap<>();
-            deleteMethods = new HashMap<>();
-        }
-        return remoteObject;
+  public static RemoteObject getInstance() {
+    if (remoteObject == null) {
+      remoteObject = new RemoteObject();
+      getMethods = new HashMap<>();
+      postMethods = new HashMap<>();
+      putMethods = new HashMap<>();
+      deleteMethods = new HashMap<>();
     }
+    return remoteObject;
+  }
 
     public RemoteObject()
     {
@@ -57,26 +65,29 @@ public class RemoteObject {
         return responseMessage;
     }
 
-    private void selectMethod(String method, String router) {
-        if (method.equals("GET")) {
-            runMethod = getMethods.get(router);
-        } else if (method.equals("POST")){
-            runMethod = postMethods.get(router);
-        }else if(method.equals("DELETE")){
-            runMethod = deleteMethods.get(router);
-        }else if(method.equals("PUT")){
-            runMethod = putMethods.get(router);
-        }
-        runPath = router;
+    return responseMessage;
+  }
+
+  private void selectMethod(String method, String router) {
+    if (method.equals("GET")) {
+      runMethod = getMethods.get(router);
+    } else if (method.equals("POST")) {
+      runMethod = postMethods.get(router);
+    } else if (method.equals("DELETE")) {
+      runMethod = deleteMethods.get(router);
+    } else if (method.equals("PUT")) {
+      runMethod = putMethods.get(router);
     }
+    runPath = router;
+  }
 
-    private Object callMethod(JSONObject requestMesseger) throws NoSuchMethodException,
-            InvocationTargetException, InstantiationException, IllegalAccessException {
+  private Object callMethod(JSONObject requestMesseger) throws NoSuchMethodException,
+      InvocationTargetException, InstantiationException, IllegalAccessException {
 
-        Class<?> clazz = runMethod.getDeclaringClass();
-        Object instance = clazz.getDeclaredConstructor().newInstance();
-        Annotation annotations[][] = runMethod.getParameterAnnotations();
-        Object responseObj = null;
+    Class<?> clazz = runMethod.getDeclaringClass();
+    Object instance = clazz.getDeclaredConstructor().newInstance();
+    Annotation annotations[][] = runMethod.getParameterAnnotations();
+    Object responseObj = null;
 
         //sem parametros
         if (annotations.length == 0) {
@@ -97,8 +108,10 @@ public class RemoteObject {
                 }
             }
         }
-        return responseObj;
-
+      }
     }
+    return responseObj;
+
+  }
 
 }
