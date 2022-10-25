@@ -40,13 +40,6 @@ public class RemoteObject {
     return remoteObject;
   }
 
-    public RemoteObject()
-    {
-        getMethods = new HashMap<>();
-        postMethods = new HashMap<>();
-        putMethods = new HashMap<>();
-        deleteMethods = new HashMap<>();
-    }
 
     public ResponseMessage invokeMethods(RequestMessage requestMesseger) {
         ResponseMessage responseMessage = new ResponseMessage();
@@ -65,8 +58,6 @@ public class RemoteObject {
         return responseMessage;
     }
 
-    return responseMessage;
-  }
 
   private void selectMethod(String method, String router) {
     if (method.equals("GET")) {
@@ -108,8 +99,7 @@ public class RemoteObject {
                 }
             }
         }
-      }
-    }
+
     return responseObj;
 
   }

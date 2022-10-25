@@ -1,35 +1,88 @@
 package org.com.middleware.basic;
 
 import java.io.IOException;
-import org.com.middleware.abstracts.AbstractMyMiddleware;
-import org.com.middleware.identification.infraestrutura.IServerRequestHandler;
-import org.com.middleware.identification.infraestrutura.model.Protocol;
-import org.com.middleware.identification.infraestrutura.tcp.ServerRequestHandlerTCP;
-import org.com.middleware.identification.infraestrutura.udp.ServerRequestHandlerUDP;
+import java.lang.reflect.Method;
 
-public class MyMiddleware extends AbstractMyMiddleware {
+import org.com.middleware.identification.Registry;
+import org.com.middleware.abstracts.AbstractInvoker;
+import org.com.middleware.annotations.*;
 
-  RemoteObject remoteObject;
-
-  IServerRequestHandler serverRequestHandler;
-
-  public MyMiddleware(Protocol protocol) {
-    serverRequestHandler = protocol.equals(Protocol.TCP) ? new ServerRequestHandlerTCP()
-        : new ServerRequestHandlerUDP();
-    remoteObject = RemoteObject.getInstance();
-  }
+public class MyMiddleware  {
+  private AbstractInvoker invoker;
+  private Registry registry;
+  public String objectId;
+  private RemoteObject rmi;
+  private Object stub;
 
   public MyMiddleware() {
-    serverRequestHandler = new ServerRequestHandlerTCP();
-    remoteObject = RemoteObject.getInstance();
+    rmi = RemoteObject.getInstance();
+  }
+
+  public void setInvoker(AbstractInvoker invoker){
+    this.invoker = invoker;
+  }
+
+  public void registerRMI(Object object) {
+
+    this.registry = Registry.getInstance();
+    this.stub = object;
+    this.addClassMethods();
+
+    registry.bind(objectId, rmi);
+  }
+
+
+  public void addClassMethods(){
+    try{
+      Class<?> clazs = stub.getClass();
+      Method methods[] = clazs.getDeclaredMethods();
+      this.objectId = getObjectId(clazs);
+
+      for (Method method: methods) {
+          method.setAccessible(true);
+          String router = "";
+          if (method.isAnnotationPresent(GetMapping.class)) {
+            router = objectId.concat(method.getAnnotation(GetMapping.class).value());
+            System.out.println("rota" + router);
+            rmi.getMethods.put(router, method);
+          }
+
+          if (method.isAnnotationPresent(PostMapping.class)) {
+            router = objectId.concat(method.getAnnotation(PostMapping.class).value());
+            rmi.postMethods.put(router, method);
+          }
+
+          if (method.isAnnotationPresent(PutMapping.class)) {
+            router = objectId.concat(method.getAnnotation(PutMapping.class).value());
+            rmi.putMethods.put(router, method);
+          }
+
+          if (method.isAnnotationPresent(DeleteMapping.class)) {
+            router = objectId.concat(method.getAnnotation(DeleteMapping.class).value());
+            rmi.putMethods.put(router, method);
+          }
+        }
+      }catch (Exception e){
+        System.out.println(e);
+    }
+  }
+
+  private String getObjectId(Class<?> clazz) throws Exception{
+
+    if(clazz.isAnnotationPresent(RequestMapping.class)){
+        return clazz.getAnnotation(RequestMapping.class).value();
+    }else {
+        throw new Exception("não foi possível identificar o obejo id");
+    }
   }
 
   public void start(int porta) {
     try {
-      serverRequestHandler.startServer(porta);
+        new ServerRequestHandler(porta, invoker).startServer();
     } catch (IOException e) {
-      System.err.println("erro ao tentar estabelecer conexão com o servidor");
+        System.err.println("erro ao tentar estabelecer conexão com o servidor");
     }
 
   }
 }
+

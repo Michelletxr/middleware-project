@@ -1,4 +1,4 @@
-package org.com.middleware.abstract_class;
+package org.com.middleware.abstracts;
 
 import org.com.middleware.messager.Marshaller;
 import org.com.middleware.messager.RequestMessage;
@@ -16,9 +16,8 @@ public abstract class AbstractInvoker implements Runnable {
     protected RequestMessage requestMessager;
     protected ResponseMessage responseMessager;
 
-    public AbstractInvoker(Socket connectionClient)
+    public AbstractInvoker()
     {
-        this.connectionClient = connectionClient;
         this.marshaller = new Marshaller();
         this.requestMessager = new RequestMessage();
         this.responseMessager = new ResponseMessage();
@@ -46,6 +45,10 @@ public abstract class AbstractInvoker implements Runnable {
         } catch (IOException e) {
             System.err.println("erro ao tenatar enviar mensagem: " + e.getStackTrace());
         }
+    }
+
+    public void setConnectionClient(Socket connectionClient){
+        this.connectionClient = connectionClient;
     }
 
     @Override

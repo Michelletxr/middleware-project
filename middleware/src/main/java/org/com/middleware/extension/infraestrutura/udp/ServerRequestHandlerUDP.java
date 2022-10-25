@@ -1,9 +1,10 @@
-package org.com.middleware.identification.infraestrutura.udp;
+package org.com.middleware.extension.infraestrutura.udp;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import org.com.middleware.identification.infraestrutura.IServerRequestHandler;
+
+import org.com.middleware.extension.infraestrutura.IServerRequestHandler;
 
 public class ServerRequestHandlerUDP implements IServerRequestHandler {
 

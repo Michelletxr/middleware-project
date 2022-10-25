@@ -1,28 +1,31 @@
 package org.com.middleware.identification;
 
 import org.com.middleware.basic.RemoteObject;
+
 import java.util.HashMap;
 
 public class Registry {
 
-  public static HashMap<String, RemoteObject> remoteObjectHashMap;
-  private static Registry registry;
+    public  static  HashMap<String, RemoteObject> remoteObjectHashMap;
 
-  static public Registry getInstance() {
+    private static Registry registry;
 
-    if (registry == null) {
-      registry = new Registry();
-      remoteObjectHashMap = new HashMap<>();
+    static public Registry getInstance() {
+
+        if (registry == null) {
+            registry = new Registry();
+            remoteObjectHashMap = new HashMap<>();
+        }
+        return registry;
     }
-    return new Registry();
-  }
 
-  public void bind(String id, RemoteObject object) {
-    System.out.println("vou chamar o look" + id);
-    remoteObjectHashMap.put(id, object);
-  }
+    public void bind(String id, RemoteObject object)
+    {
+        remoteObjectHashMap.put(id,object);
 
-  public RemoteObject lookup(String key) {
-    return remoteObjectHashMap.get(key);
-  }
+    }
+
+    public RemoteObject lookup(String key){
+        return remoteObjectHashMap.get(key);
+    }
 }

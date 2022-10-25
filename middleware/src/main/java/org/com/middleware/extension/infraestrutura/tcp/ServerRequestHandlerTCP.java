@@ -1,9 +1,9 @@
-package org.com.middleware.identification.infraestrutura.tcp;
+package org.com.middleware.extension.infraestrutura.tcp;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import org.com.middleware.identification.infraestrutura.IServerRequestHandler;
+import org.com.middleware.extension.infraestrutura.IServerRequestHandler;
 
 
 public class ServerRequestHandlerTCP implements IServerRequestHandler {

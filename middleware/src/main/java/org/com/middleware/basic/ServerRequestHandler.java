@@ -1,5 +1,7 @@
 package org.com.middleware.basic;
 
+import org.com.middleware.abstracts.AbstractInvoker;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -7,10 +9,12 @@ import java.net.Socket;
 public class ServerRequestHandler {
 
     private ServerSocket serverSocket;
+    private AbstractInvoker invoker;
     private  int port;
 
-    public ServerRequestHandler(int port){
+    public ServerRequestHandler(int port, AbstractInvoker invoker){
         this.port = port;
+        this.invoker = invoker;
     }
 
     public void startServer() throws IOException {
@@ -19,18 +23,12 @@ public class ServerRequestHandler {
         while (true){
 
             Socket connection = serverSocket.accept();
-
-           // BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-
-            //System.out.println("req" + in.readLine());
-            Invoker invoker = new Invoker(connection);
-            invoker.run();
-          //  dispatchToInvoker(connetion);
+            dispatchToInvoker(connection);
         }
     }
     public void dispatchToInvoker(Socket connectionClient){
-            Invoker invoker = new Invoker(connectionClient);
-            invoker.run();
+        invoker.setConnectionClient(connectionClient);
+        invoker.run();
     }
 
 }

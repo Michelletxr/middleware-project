@@ -1,4 +1,4 @@
-package org.com.middleware.identification.infraestrutura;
+package org.com.middleware.extension.infraestrutura;
 
 import java.io.IOException;
 

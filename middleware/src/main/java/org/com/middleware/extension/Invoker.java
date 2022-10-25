@@ -1,16 +1,14 @@
 package org.com.middleware.extension;
-import org.com.middleware.abstract_class.AbstractInvoker;
+import org.com.middleware.abstracts.AbstractInvoker;
 import org.com.middleware.basic.RemoteObject;
 import java.io.IOException;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class Invoker extends AbstractInvoker {
     private Interceptor interceptor;
     private final RemoteObject remoteObject;
-    public Invoker(Socket connectionClient) {
-        super(connectionClient);
+    public Invoker() {
         this.remoteObject = RemoteObject.getInstance();
         this.interceptor = Interceptor.getInstance();
     }
