@@ -7,17 +7,16 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.Scanner;
 
 public class Interceptor {
-
     private HashMap<String, Method> hooks;
     private static Interceptor instance;
-
     private String objectId;
-
     private Interceptor() {
         this.hooks = new HashMap<>();
     }
+
     public static Interceptor getInstance(){
         if(instance == null){
             instance = new Interceptor();
@@ -26,23 +25,30 @@ public class Interceptor {
     }
 
     public void registerHook(Method methods[]){
+        String router = "";
         for (Method method: methods) {
-            if(method.isAnnotationPresent(GetMapping.class)){
-                hooks.put(method.getAnnotation(GetMapping.class).value(), method);
+            if (method.isAnnotationPresent(GetMapping.class)) {
+                router = objectId.concat(method.getAnnotation(GetMapping.class).value());
+                hooks.put(router, method);
             }
-            if(method.isAnnotationPresent(PostMapping.class)){
-                hooks.put(method.getAnnotation(PostMapping.class).value(), method);
+
+            if (method.isAnnotationPresent(PostMapping.class)) {
+                router = objectId.concat(method.getAnnotation(PostMapping.class).value());
+                hooks.put(router, method);
             }
-            if(method.isAnnotationPresent(PutMapping.class)){
-                hooks.put(method.getAnnotation(PutMapping.class).value(), method);
+
+            if (method.isAnnotationPresent(PutMapping.class)) {
+                router = objectId.concat(method.getAnnotation(PutMapping.class).value());
+                hooks.put(router, method);
             }
-            if(method.isAnnotationPresent(DeleteMapping.class)){
-                hooks.put(method.getAnnotation(DeleteMapping.class).value(), method);
+
+            if (method.isAnnotationPresent(DeleteMapping.class)) {
+                router = objectId.concat(method.getAnnotation(DeleteMapping.class).value());
+                hooks.put(router, method);
             }
         }
     }
 
-    //verify authorization required
     public String before(String operation, Object context){
         String result = null;
         if("authorization".equals(operation))
@@ -52,28 +58,21 @@ public class Interceptor {
         return result;
     }
 
-    //logs
-    public void afther(String contexto, ArrayList<String> args){
-        String mensagem = contexto.concat(" " + args.toString());
-        this.generateLogs(mensagem);
-    }
+    public void afther(String contexto){
 
-     private void generateLogs(String msg){
-        OutputStream os = null; // nome do arquivo que será escrito
         try {
-           // String fileName = System.getProperty("user.home").concat("/logs/" + objectId);
-            os = new FileOutputStream(objectId);
-            Writer wr = new OutputStreamWriter(os); // criação de um escritor
-            BufferedWriter br = new BufferedWriter(wr); // adiciono a um escritor de buffer
-            br.write(msg);
-            br.newLine();
-            br.close();
-        } catch (Exception e) {
-           System.out.println("erro ao tentar gerar arquivos de log" + e);
+            FileWriter fw = new FileWriter("logs.txt", true);
+            BufferedWriter buffWrite = new BufferedWriter(fw);
+            String linha = "";
+            Scanner in = new Scanner(System.in);
+            linha = contexto;
+            buffWrite.append(linha + "\n");
+            buffWrite.close();
+        } catch (IOException e) {
+            System.out.println("erro ao tentar gerar log");
         }
     }
 
-    //checkautorization
     public boolean checkAuthorization(Method method, RequestMessage request){
         boolean autorized = true;
         method.setAccessible(true);
@@ -85,15 +84,14 @@ public class Interceptor {
         return autorized;
     }
 
-    //verify request router
     public String preRequestVerification(RequestMessage request){
 
         Method method = hooks.get(request.getRouter());
         String status = "error";
         if(!Objects.isNull(method)) {
-                if(checkAuthorization(method, request)){
-                    status = "sucess";
-                }
+            if(checkAuthorization(method, request)){
+                status = "sucess";
+            }
         }
         return status;
     }

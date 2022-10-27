@@ -14,8 +14,9 @@ import org.json.JSONObject;
 public class RequestMessage {
     private String method;
     private String router;
-    private String valorBody;
     private JSONObject body;
+    private String valueBody;
     private String authorization;
+    private String key;
 }
 
