@@ -7,7 +7,6 @@ import org.json.JSONObject;
 @NoArgsConstructor
 @RequestMapping(value = "/hello")
 public class HelloWorld {
-    @Authorization
     @GetMapping("")
     public String helo() {
         return "hello get";
