@@ -11,12 +11,12 @@ public class HelloWorld2 {
     @Authorization
     @PutMapping("/put")
     public String helo() {
-        return "hello2 get";
+        return "hello2 put";
     }
 
     @DeleteMapping("/delete")
     public String HelloName(@RequestBody JSONObject hello ) {
-        return "helo post" ;
+        return "helo2 delete" ;
     }
     public record ObjHello(String name){}
 }

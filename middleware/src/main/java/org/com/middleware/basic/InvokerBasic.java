@@ -57,6 +57,7 @@ public class InvokerBasic implements Runnable, Iinvoker {
     @Override
     public void implementInvoker() {
         this.requestMessager = receiveRequestCliente();
+        System.out.println("req"+requestMessager);
         if(!Objects.isNull(requestMessager)){
             RemoteObject rmi = null;
             try {

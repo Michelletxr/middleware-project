@@ -7,12 +7,13 @@ import org.json.JSONObject;
 @NoArgsConstructor
 @RequestMapping(value = "/hello")
 public class HelloWorld {
-    @GetMapping("")
+    @Authorization
+    @GetMapping("/get")
     public String helo() {
         return "hello get";
     }
 
-    @PostMapping(value = "/teste")
+    @PostMapping(value = "/post")
     public String HelloName(@RequestBody JSONObject hello ) {
         return "helo post" ;
     }

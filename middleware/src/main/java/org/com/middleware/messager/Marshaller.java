@@ -2,7 +2,6 @@ package org.com.middleware.messager;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.StringTokenizer;
 import org.json.JSONObject;
@@ -53,7 +52,7 @@ public class Marshaller {
             String router = tokenizer.nextToken();
             String key = getRouterKey(router);
             String body = "";
-            String authorization = "";
+            String authorization = null;
 
             for (int i = 0; i < req.length ; i++) {
                 if (req[i].contains("Authorization")) {authorization = getAuthorization(req[i]);}
@@ -79,25 +78,26 @@ public class Marshaller {
             String router = tokenizer.nextToken();
             String key = getRouterKey(router);
             String body = "";
-            String authorization = "";
+            String authorization = null;
+            boolean stop = false;
 
-            while (true) {
+            while (!stop) {
                 request = in.readLine();
-                System.out.println(request);
                 if (request.contains("Authorization")) {authorization = getAuthorization(request);}
-                if (request == null) {
-                    while (!((request = in.readLine())==null)) {
-                        body = body.concat(request);
-                        //System.out.println(request);
+                if (request.isBlank()) {
+                    request = in.readLine();
+                    while (!request.isBlank()) {
+                        body = body + request;
+                        request = in.readLine();
                     }
                     break;
                 }
             }
-            System.out.println(body);
             return RequestMessage.builder()
                     .method(method)
                     .router(router)
                     .body(!"".equals(body) ? new JSONObject(body) : null)
+                    .valueBody(body)
                     .authorization(authorization)
                     .key(key)
                     .build();

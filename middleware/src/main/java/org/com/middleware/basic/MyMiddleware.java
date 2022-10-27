@@ -86,7 +86,7 @@ public class MyMiddleware  {
 
           if (method.isAnnotationPresent(DeleteMapping.class)) {
             router = objectId.concat(method.getAnnotation(DeleteMapping.class).value());
-            rmi.putMethods.put(router, method);
+            rmi.deleteMethods.put(router, method);
           }
         }
   }

@@ -34,7 +34,6 @@ public abstract class AbstratInvokerExtension implements Runnable, Iinvoker {
             try {
 
                 if (interceptor.before("authorization", requestMessager).equals("sucess")) {
-                    System.out.println(requestMessager);
                     this.remoteObject = this.registry.lookup(requestMessager.getKey());
                     responseMessager = this.remoteObject.invokeMethods(requestMessager);
                 } else {

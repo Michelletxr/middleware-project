@@ -40,7 +40,7 @@ public class Calculator {
 
     //Put method, the attribute "router" is what sets the endpoint route
     @PutMapping(value= "/mul")
-    public JSONObject mul(JSONObject jsonObject) throws Throwable {
+    public JSONObject mul(@RequestBody JSONObject jsonObject) throws Throwable {
         //Get the variables from JSON
         float a = jsonObject.getFloat("var1");
         float b = jsonObject.getFloat("var2");
@@ -53,7 +53,7 @@ public class Calculator {
 
     //Delete method, the attribute "router" is what sets the endpoint route
     @DeleteMapping(value = "/div")
-    public JSONObject div(JSONObject jsonObject) throws Throwable {
+    public JSONObject div(@RequestBody JSONObject jsonObject) throws Throwable {
         //Get the variables from JSON
         float a = jsonObject.getFloat("var1");
         float b = jsonObject.getFloat("var2");
