@@ -22,6 +22,9 @@ public class MyMiddleware  {
   private Protocol protocol;
   private String objectId;
 
+    public static void main(String[] args) {
+
+    }
     public MyMiddleware() {
         this.protocol = Protocol.TCP;
         this.invoker = new InvokerBasic();
