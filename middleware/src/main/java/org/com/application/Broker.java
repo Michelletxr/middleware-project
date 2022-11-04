@@ -1,7 +1,6 @@
-package org.com.aplication;
+package org.com.application;
 
 import org.com.middleware.basic.MyMiddleware;
-import org.com.middleware.extension.infra.model.Protocol;
 
 public class Broker {
 

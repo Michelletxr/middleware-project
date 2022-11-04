@@ -1,4 +1,4 @@
-package org.com.aplication;
+package org.com.application;
 import org.com.middleware.annotations.*;
 import org.json.JSONObject;
 
